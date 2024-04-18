@@ -1,0 +1,31 @@
+version: '3'
+services:
+  python:
+    build: src/
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_HOST=database
+      - DATABASE_USER=homestead
+      - DATABASE_PASSWORD=homestead
+      - DATABASE_NAME=homestead
+    depends_on:
+      - database
+
+  database:
+    image: mariadb:10.5.1
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./docker/init:/docker-entrypoint-initdb.d
+    environment:
+      - TZ=America/La_Paz
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_INITDB_SKIP_TZINFO=1
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=homestead
+      - MYSQL_DATABASE=homestead
+    ports:
+      - "3306:3306"
+
+volumes:
+  dbdata:
